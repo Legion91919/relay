@@ -1,0 +1,36 @@
+{
+  "name": "relay",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+  "forwardPorts": [
+    5103,
+    5173
+  ],
+  "portsAttributes": {
+    "5103": {
+      "label": "API (Relay)",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Web app",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csdevkit",
+        "bierner.markdown-mermaid",
+        "editorconfig.editorconfig"
+      ]
+    }
+  },
+  "hostRequirements": {
+    "cpus": 2
+  }
+}

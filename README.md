@@ -13,6 +13,19 @@ flowchart LR
   api --> idm[Identity] & conv[Conversations] & del[Delivery] & pres[Presence]
 ```
 
+
+## Run it in GitHub Codespaces
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/Legion91919/relay?quickstart=1)
+
+The dev container installs the SDKs, restores packages and runs every test once on first start. The same setup works locally with VS Code's Dev Containers extension.
+
+| What | Command | Port |
+|---|---|---|
+| API (Relay) | `ASPNETCORE_ENVIRONMENT=Development ASPNETCORE_URLS=http://0.0.0.0:5103 dotnet run --project src/Relay.Api` | 5103 |
+| Web app | `cd web && npm run dev` | 5173 |
+| All tests (same as CI) | `scripts/test-all.sh` | - |
+
 ## What it does (slice 1)
 - Two people chat in real time over SignalR (`/hubs/chat`, WebSockets with long-polling fallback).
 - Ticks: one tick when the server has it, two when the other phone has it, amber when it has been read. Status is also shown as text, never by colour alone.
