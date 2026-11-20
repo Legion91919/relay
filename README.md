@@ -2,6 +2,16 @@
 
 A private messaging app for Kalahari Mobile's prepaid customers (fictional client). The network's customers rely on foreign messaging apps that don't work on zero-rated data, so customers with no airtime can't message at all. Relay is built for low-end phones on patchy 2G/3G networks.
 
+## See it in action
+
+![Relay walkthrough on two phones: Thandi messages Sipho while he is offline (one tick, sent), his phone reconnects (two grey ticks, delivered, and the server holds 0 message bodies), he opens the chat (blue ticks, read) and replies](docs/media/demo.gif)
+
+| Sent (recipient offline) | Read | Mobile |
+|---|---|---|
+| ![One tick while Sipho's phone has no signal](docs/media/sent.png) | ![Blue ticks after Sipho opens the chat](docs/media/read.png) | ![Chat on a phone-sized screen](docs/media/mobile.png) |
+
+Full-quality video: [docs/media/demo.mp4](docs/media/demo.mp4). Recorded from the running app with `demo/` (`cd demo && npm install && npm run record`); the scenario shows two phone-sized frames of the real web app, each signed in as a different demo user. At the delivered step it reads `/api/delivery/stats` and fails unless the server holds 0 message bodies.
+
 ## Design at a glance
 **Brief.** One-to-one chat that delivers in under a second when both phones are online, loses nothing when a phone drops off the network, and forgets message content on the server as soon as it is delivered.
 

@@ -1,0 +1,10 @@
+{
+  "start": [
+    { "name": "api", "cmd": "dotnet run --project src/Relay.Api --no-build", "env": { "ASPNETCORE_ENVIRONMENT": "Development", "ASPNETCORE_URLS": "http://localhost:5103" }, "ready": "http://localhost:5103/health/ready" },
+    { "name": "web", "cmd": "npm run dev -- --port 6103 --strictPort", "cwd": "web", "ready": "http://localhost:6103" }
+  ],
+  "url": "http://localhost:6103",
+  "mobileUrl": "http://localhost:6103/?as=u_thandi&chat=dm.u_sipho.u_thandi",
+  "viewport": { "width": 1280, "height": 800 },
+  "stepPauseMs": 1800
+}
