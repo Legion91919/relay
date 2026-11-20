@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relay chat - variant A: compact log</title>
+<style>
+:root{--color-bg:#fbf8f3;--color-surface:#ffffff;--color-text:#1d1b18;--color-muted:#5f584e;--color-border:#d9d0c1;--color-accent:#0f5c5a;--color-on-accent:#ffffff;--color-bubble-in:#ece5d8;--color-bubble-out:#0f5c5a;--color-tick-muted:#d7ece9;--color-tick-read:#ffd27a;--color-warn-bg:#fff1cc;--color-warn-text:#5c3d00;--color-danger:#b3261e;--color-on-danger:#ffffff;--color-success:#1e6b3a;--color-focus:#0f5c5a;--font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',sans-serif;--font-xs:12px;--font-sm:14px;--font-md:16px;--font-lg:18px;--font-xl:22px;--space-xxs:2px;--space-xs:4px;--space-sm:8px;--space-md:12px;--space-lg:16px;--space-xl:24px;--radius-sm:6px;--radius-md:12px;--radius-bubble:16px;--radius-pill:999px;--tap:44px}
+*{box-sizing:border-box}body{margin:0;font-family:var(--font-family);font-size:var(--font-md);line-height:1.4;color:var(--color-text);background:var(--color-bg)}
+.app{max-width:720px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;border-inline:1px solid var(--color-border)}
+header{display:flex;align-items:center;gap:var(--space-sm);padding:var(--space-sm) var(--space-md);border-bottom:1px solid var(--color-border);background:var(--color-surface)}
+header b{font-size:var(--font-md)}header small{color:var(--color-muted);font-size:var(--font-sm)}
+.status{font-size:var(--font-sm);padding:var(--space-xs) var(--space-md);background:var(--color-warn-bg);color:var(--color-warn-text);border-bottom:1px solid var(--color-border)}
+ol{list-style:none;margin:0;padding:var(--space-sm) 0;flex:1;font-size:var(--font-sm)}
+li{display:grid;grid-template-columns:56px 1fr auto;gap:var(--space-sm);padding:var(--space-xs) var(--space-md);border-bottom:1px dashed var(--color-border)}
+li .who{font-weight:600}li.me .who{color:var(--color-accent)}li time{color:var(--color-muted);font-size:var(--font-xs);white-space:nowrap}
+.tick{font-size:var(--font-xs);color:var(--color-muted);font-weight:600}.tick.read{color:var(--color-accent)}
+form{display:flex;gap:var(--space-xs);padding:var(--space-sm);border-top:1px solid var(--color-border);background:var(--color-surface)}
+input{flex:1;font:inherit;padding:var(--space-sm);border:1px solid var(--color-border);border-radius:var(--radius-sm);min-height:var(--tap)}
+button{font:inherit;font-weight:600;min-height:var(--tap);padding:0 var(--space-lg);border:0;border-radius:var(--radius-sm);background:var(--color-accent);color:var(--color-on-accent)}
+:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}
+</style></head><body>
+<div class="app">
+  <header>
+    <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><path d="M4 6a4 4 0 0 1 4-4h16a4 4 0 0 1 4 4v13a4 4 0 0 1-4 4H13l-6 6v-6H8a4 4 0 0 1-4-4z" fill="var(--color-accent)"/><path d="M12 18v-8h2.4v1.4c.7-1.1 1.8-1.6 3.4-1.6v2.5c-2 0-3.2.8-3.2 2.6V18z" fill="var(--color-on-accent)"/></svg>
+    <div><b>Sipho Dlamini</b><br><small>last seen 10:41</small></div>
+  </header>
+  <div class="status" role="status">Reconnecting... 1 message will send when you are back online.</div>
+  <ol aria-label="Messages with Sipho Dlamini">
+    <li><span class="who">Sipho</span><span>Are you coming to the taxi rank at 5?</span><time>10:32</time></li>
+    <li class="me"><span class="who">You</span><span>Yes, leaving work at half past four</span><time>10:33 <span class="tick read" aria-label="Read">Read</span></time></li>
+    <li><span class="who">Sipho</span><span>Bring the airtime voucher for Gogo please</span><time>10:35</time></li>
+    <li class="me"><span class="who">You</span><span>Got it. R29 bundle?</span><time>10:36 <span class="tick read">Read</span></time></li>
+    <li><span class="who">Sipho</span><span>Ja, the weekly one</span><time>10:38</time></li>
+    <li class="me"><span class="who">You</span><span>Cool, see you there</span><time>10:40 <span class="tick">Delivered</span></time></li>
+    <li class="me"><span class="who">You</span><span>Also grabbing bread</span><time>10:42 <span class="tick">Sending...</span></time></li>
+  </ol>
+  <form onsubmit="return false"><label for="m" hidden>Message</label><input id="m" placeholder="Message Sipho"><button>Send</button></form>
+</div>
+</body></html>

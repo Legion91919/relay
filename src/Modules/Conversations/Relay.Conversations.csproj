@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Conversations module. Only types in Relay.Conversations.Contracts (and ConversationsModule) are public; everything else stays internal. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Relay.Tests" />
+  </ItemGroup>
+</Project>

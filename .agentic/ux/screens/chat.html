@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relay chat - final</title>
+<style>
+:root{--color-bg:#fbf8f3;--color-surface:#ffffff;--color-text:#1d1b18;--color-muted:#5f584e;--color-border:#d9d0c1;--color-accent:#0f5c5a;--color-on-accent:#ffffff;--color-bubble-in:#ece5d8;--color-bubble-out:#0f5c5a;--color-tick-muted:#d7ece9;--color-tick-read:#ffd27a;--color-warn-bg:#fff1cc;--color-warn-text:#5c3d00;--color-danger:#b3261e;--color-on-danger:#ffffff;--color-success:#1e6b3a;--color-focus:#0f5c5a;--font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',sans-serif;--font-xs:12px;--font-sm:14px;--font-md:16px;--font-lg:18px;--font-xl:22px;--space-xxs:2px;--space-xs:4px;--space-sm:8px;--space-md:12px;--space-lg:16px;--space-xl:24px;--radius-sm:6px;--radius-md:12px;--radius-bubble:16px;--radius-pill:999px;--tap:44px}
+*{box-sizing:border-box}body{margin:0;font-family:var(--font-family);font-size:var(--font-md);line-height:1.4;color:var(--color-text);background:var(--color-bg)}
+.switcher{display:flex;flex-wrap:wrap;gap:var(--space-xs);padding:var(--space-sm);background:var(--color-surface);border-bottom:1px dashed var(--color-border);font-size:var(--font-xs)}
+.switcher fieldset{border:0;margin:0;padding:0;display:flex;gap:var(--space-xs);align-items:center}
+.switcher button{font:inherit;padding:var(--space-xs) var(--space-sm);border:1px solid var(--color-border);border-radius:var(--radius-pill);background:var(--color-bg);color:var(--color-text)}
+.switcher button[aria-pressed=true]{background:var(--color-accent);color:var(--color-on-accent);border-color:var(--color-accent)}
+html,body{height:100%}body{display:flex;flex-direction:column}.app{max-width:720px;width:100%;margin:0 auto;flex:1;min-height:0;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:var(--space-md);padding:var(--space-md) var(--space-lg);background:var(--color-accent);color:var(--color-on-accent)}
+.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-weight:600;background:var(--color-bubble-in);color:var(--color-text);flex:none}
+.name{font-weight:600;font-size:var(--font-lg)}.presence{font-size:var(--font-sm)}
+.banner{font-size:var(--font-sm);font-weight:600;color:var(--color-warn-text);background:var(--color-warn-bg)}
+.banner.pill{align-self:center;margin-top:var(--space-sm);padding:var(--space-xs) var(--space-md);border-radius:var(--radius-pill)}
+.banner.strip{padding:var(--space-sm) var(--space-lg);border-bottom:1px solid var(--color-border)}
+.list{flex:1;overflow-y:auto;padding:var(--space-md) var(--space-lg);display:flex;flex-direction:column;gap:var(--space-sm)}
+.day{align-self:center;font-size:var(--font-xs);color:var(--color-muted)}
+.msg{max-width:78%;padding:var(--space-sm) var(--space-md);border-radius:var(--radius-bubble);overflow-wrap:anywhere}
+.in{align-self:flex-start;background:var(--color-bubble-in);border-bottom-left-radius:var(--radius-sm)}
+.out{align-self:flex-end;background:var(--color-bubble-out);color:var(--color-on-accent);border-bottom-right-radius:var(--radius-sm)}
+.meta{display:flex;justify-content:flex-end;align-items:center;gap:var(--space-xs);font-size:var(--font-xs);margin-top:var(--space-xxs)}
+.in .meta{color:var(--color-muted)}.out .meta{color:var(--color-tick-muted)}
+.tick svg{width:18px;height:12px;display:block}.tick.read{color:var(--color-tick-read)}
+.status-text{align-self:flex-end;font-size:var(--font-xs);color:var(--color-muted);margin-top:calc(-1 * var(--space-xs))}
+.centre{flex:1;display:grid;place-items:center;text-align:center;padding:var(--space-xl);color:var(--color-muted)}
+.centre h2{color:var(--color-text);font-size:var(--font-lg);margin:var(--space-sm) 0}
+.error h2{color:var(--color-danger)}
+.retry{font:inherit;font-weight:600;min-height:var(--tap);padding:0 var(--space-xl);border:0;border-radius:var(--radius-pill);background:var(--color-accent);color:var(--color-on-accent)}
+.skel{background:var(--color-bubble-in);border-radius:var(--radius-bubble);height:40px;opacity:.7}
+.composer{display:flex;gap:var(--space-sm);padding:var(--space-sm) var(--space-lg) var(--space-lg)}
+textarea{flex:1;font:inherit;resize:none;padding:var(--space-md) var(--space-lg);border:1px solid var(--color-border);border-radius:var(--radius-bubble);background:var(--color-surface);color:var(--color-text);min-height:48px}
+.send{width:48px;height:48px;border-radius:50%;border:0;background:var(--color-accent);color:var(--color-on-accent);display:grid;place-items:center;flex:none}
+.send:disabled{opacity:.5}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <symbol id="t-wait" viewBox="0 0 18 12"><circle cx="9" cy="6" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 3.5V6l1.8 1.2" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+ <symbol id="t-sent" viewBox="0 0 18 12"><path d="M2 6.5l3.5 3.5L12 2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+ <symbol id="t-two" viewBox="0 0 18 12"><path d="M1 6.5l3.5 3.5L11 2M7 9l1 1L16 2" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+<div class="switcher" aria-label="Design state switcher (prototype only)">
+  <fieldset><legend class="sr">Screen state</legend><span>State:</span>
+    <button data-s="loading">loading</button><button data-s="empty">empty</button><button data-s="error">error</button><button data-s="success" aria-pressed="true">success</button></fieldset>
+  <fieldset><legend class="sr">Connection</legend><span>Network:</span>
+    <button data-c="online" aria-pressed="true">online</button><button data-c="connecting">connecting</button><button data-c="reconnecting">reconnecting</button><button data-c="offline">offline</button></fieldset>
+</div>
+<div class="app">
+  <header><div class="avatar" aria-hidden="true">SD</div><div><div class="name">Sipho Dlamini</div><div class="presence" id="presence">online</div></div></header>
+  <div id="banner" role="status" aria-live="polite"></div>
+  <main class="list" id="body" aria-label="Messages with Sipho Dlamini"></main>
+  <form class="composer" onsubmit="return false"><label for="m" class="sr">Message</label><textarea id="m" rows="1" placeholder="Message"></textarea><button class="send" id="send" aria-label="Send"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 20l18-8L3 4v6l12 2-12 2z" fill="currentColor"/></svg></button></form>
+</div>
+<script>
+const msgs=[["in","Are you coming to the taxi rank at 5?","10:32"],["out","Yes, leaving work at half past four","10:33","read"],["in","Bring the airtime voucher for Gogo please","10:35"],["out","Got it. R29 bundle?","10:36","read"],["in","Ja, the weekly one","10:38"],["out","Cool, see you there","10:40","delivered"],["out","Also grabbing bread","10:42","sent"]];
+const icon={waiting:"t-wait",sent:"t-sent",delivered:"t-two",read:"t-two"},label={waiting:"Waiting to send",sent:"Sent",delivered:"Delivered",read:"Read"};
+let s="success",c="online";
+function bubble([d,t,time,st]){const tick=d==="out"?'<span class="tick '+(st==="read"?"read":"")+'"><svg><use href="#'+icon[st]+'"/></svg><span class="sr">'+label[st]+'</span></span>':"";return '<div class="msg '+d+'">'+t+'<div class="meta">'+time+' '+tick+'</div></div>'}
+function render(){
+  const list=msgs.map(m=>m.slice());
+  if(c!=="online"){list[6][3]="waiting"}
+  const b=document.getElementById("banner");
+  b.className="banner "+(c==="connecting"?"pill":c==="online"?"":"strip");
+  b.textContent=c==="online"?"":c==="connecting"?"Connecting...":c==="reconnecting"?"Reconnecting... 1 message will send when you're back.":"You're offline. 1 message will send when you're back.";
+  if(c==="online")b.className="sr";
+  document.getElementById("presence").textContent=c==="online"?"online":"last seen 10:41";
+  const body=document.getElementById("body");
+  if(s==="loading")body.innerHTML='<span class="sr">Loading messages</span>'+[60,40,70,50].map((w,i)=>'<div class="skel" style="width:'+w+'%;align-self:'+(i%2?"flex-end":"flex-start")+'"></div>').join("");
+  else if(s==="empty")body.innerHTML='<div class="centre"><div><h2>Say hi to Sipho</h2><p>Messages live on your phone. Relay deletes them from its servers once they are delivered.</p></div></div>';
+  else if(s==="error")body.innerHTML='<div class="centre error"><div><h2>Couldn\'t open this chat</h2><p>Check your signal, then try again. Your messages are safe on this phone.</p><button class="retry" type="button">Try again</button></div></div>';
+  else{const last=list[6];body.innerHTML='<div class="day">Today</div>'+list.map(bubble).join("")+'<div class="status-text">'+label[last[3]]+'</div>'}
+  document.getElementById("send").disabled=s==="loading"||s==="error";
+  document.querySelectorAll("[data-s]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.s===s));
+  document.querySelectorAll("[data-c]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.c===c));
+}
+document.querySelectorAll("[data-s]").forEach(x=>x.onclick=()=>{s=x.dataset.s;render()});
+document.querySelectorAll("[data-c]").forEach(x=>x.onclick=()=>{c=x.dataset.c;render()});
+render();
+</script>
+</body></html>

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Relay chat - variant C: delivery-first</title>
+<style>
+:root{--color-bg:#fbf8f3;--color-surface:#ffffff;--color-text:#1d1b18;--color-muted:#5f584e;--color-border:#d9d0c1;--color-accent:#0f5c5a;--color-on-accent:#ffffff;--color-bubble-in:#ece5d8;--color-bubble-out:#0f5c5a;--color-tick-muted:#d7ece9;--color-tick-read:#ffd27a;--color-warn-bg:#fff1cc;--color-warn-text:#5c3d00;--color-danger:#b3261e;--color-on-danger:#ffffff;--color-success:#1e6b3a;--color-focus:#0f5c5a;--font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans',sans-serif;--font-xs:12px;--font-sm:14px;--font-md:16px;--font-lg:18px;--font-xl:22px;--space-xxs:2px;--space-xs:4px;--space-sm:8px;--space-md:12px;--space-lg:16px;--space-xl:24px;--radius-sm:6px;--radius-md:12px;--radius-bubble:16px;--radius-pill:999px;--tap:44px}
+*{box-sizing:border-box}body{margin:0;font-family:var(--font-family);font-size:var(--font-md);line-height:1.4;color:var(--color-text);background:var(--color-bg)}
+.app{max-width:720px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+header{padding:var(--space-md) var(--space-lg);border-bottom:2px solid var(--color-accent);background:var(--color-surface)}
+header .name{font-size:var(--font-xl);font-weight:600}header .presence{color:var(--color-muted);font-size:var(--font-sm)}
+.net{display:flex;align-items:center;gap:var(--space-md);padding:var(--space-md) var(--space-lg);background:var(--color-warn-bg);color:var(--color-warn-text)}
+.net .dot{width:12px;height:12px;border-radius:50%;border:2px solid currentColor}
+.net b{display:block}.net span{font-size:var(--font-sm)}
+.outbox{margin:var(--space-md) var(--space-lg) 0;padding:var(--space-md);border:2px dashed var(--color-border);border-radius:var(--radius-md);background:var(--color-surface)}
+.outbox h2{margin:0 0 var(--space-xs);font-size:var(--font-sm);text-transform:uppercase;letter-spacing:.04em;color:var(--color-muted)}
+.outbox p{margin:0}
+.list{flex:1;padding:var(--space-md) var(--space-lg);display:flex;flex-direction:column;gap:var(--space-md)}
+.msg{padding:var(--space-md);border-radius:var(--radius-md);background:var(--color-surface);border:1px solid var(--color-border);border-left:6px solid var(--color-bubble-in)}
+.msg.out{border-left-color:var(--color-accent)}
+.msg .head{display:flex;justify-content:space-between;font-size:var(--font-sm);color:var(--color-muted);margin-bottom:var(--space-xs)}
+.state{font-weight:600;font-size:var(--font-xs);padding:var(--space-xxs) var(--space-sm);border-radius:var(--radius-pill);border:1px solid currentColor}
+.state.read{background:var(--color-accent);color:var(--color-on-accent);border-color:var(--color-accent)}
+.state.delivered{color:var(--color-accent)}.state.sent{color:var(--color-muted)}
+.composer{position:sticky;bottom:0;display:grid;gap:var(--space-sm);padding:var(--space-md) var(--space-lg);background:var(--color-surface);border-top:1px solid var(--color-border)}
+textarea{font:inherit;padding:var(--space-md);border:1px solid var(--color-border);border-radius:var(--radius-md);min-height:72px}
+button{font:inherit;font-weight:600;min-height:48px;border:0;border-radius:var(--radius-md);background:var(--color-accent);color:var(--color-on-accent)}
+.hint{font-size:var(--font-xs);color:var(--color-muted)}
+:focus-visible{outline:3px solid var(--color-focus);outline-offset:2px}
+</style></head><body>
+<div class="app">
+  <header><div class="name">Sipho Dlamini</div><div class="presence">last seen today 10:41</div></header>
+  <div class="net" role="status"><span class="dot" aria-hidden="true"></span><div><b>You are offline</b><span>Relay keeps trying. Nothing you send is lost.</span></div></div>
+  <section class="outbox" aria-label="Waiting to send"><h2>Waiting to send (1)</h2><p>Also grabbing bread</p></section>
+  <main class="list" aria-label="Messages with Sipho Dlamini">
+    <article class="msg"><div class="head"><span>Sipho - 10:32</span></div>Are you coming to the taxi rank at 5?</article>
+    <article class="msg out"><div class="head"><span>You - 10:33</span><span class="state read">Read</span></div>Yes, leaving work at half past four</article>
+    <article class="msg"><div class="head"><span>Sipho - 10:35</span></div>Bring the airtime voucher for Gogo please</article>
+    <article class="msg out"><div class="head"><span>You - 10:36</span><span class="state read">Read</span></div>Got it. R29 bundle?</article>
+    <article class="msg"><div class="head"><span>Sipho - 10:38</span></div>Ja, the weekly one</article>
+    <article class="msg out"><div class="head"><span>You - 10:40</span><span class="state delivered">Delivered</span></div>Cool, see you there</article>
+  </main>
+  <form class="composer" onsubmit="return false"><label for="m">Message to Sipho</label><textarea id="m"></textarea><button>Send (queued while offline)</button><span class="hint">Messages wait on your phone and send in order when the network is back.</span></form>
+</div>
+</body></html>
